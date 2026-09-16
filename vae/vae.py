@@ -3,6 +3,7 @@ import os
 from PIL import Image
 
 import torch
+import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
@@ -122,6 +123,81 @@ test_loader = DataLoader(
     shuffle=False
 )
 
+# --------------------------------
+# VAE Encoder
+# --------------------------------
+class Encoder(nn.Module):
+
+    def __init__(
+        self,
+        latent_dim=32
+    ):
+
+        super().__init__()
+
+        self.encoder = nn.Sequential(
+
+            nn.Conv2d(
+                1,
+                32,
+                kernel_size=4,
+                stride=2,
+                padding=1
+            ),
+            nn.ReLU(),
+
+            nn.Conv2d(
+                32,
+                64,
+                kernel_size=4,
+                stride=2,
+                padding=1
+            ),
+            nn.ReLU(),
+
+            nn.Conv2d(
+                64,
+                128,
+                kernel_size=4,
+                stride=2,
+                padding=1
+            ),
+            nn.ReLU(),
+
+            nn.Conv2d(
+                128,
+                256,
+                kernel_size=4,
+                stride=2,
+                padding=1
+            ),
+            nn.ReLU()
+        )
+
+        self.flatten = nn.Flatten()
+
+        self.fc_mu = nn.Linear(
+            256 * 16 * 16,
+            latent_dim
+        )
+
+        self.fc_logvar = nn.Linear(
+            256 * 16 * 16,
+            latent_dim
+        )
+
+
+    def forward(self, x):
+
+        x = self.encoder(x)
+
+        x = self.flatten(x)
+
+        mu = self.fc_mu(x)
+
+        logvar = self.fc_logvar(x)
+
+        return mu, logvar
 
 # --------------------------------
 # Test one training batch
@@ -142,3 +218,16 @@ print(
     "Image max:",
     images.max().item()
 )
+
+# --------------------------------
+# Test Encoder
+# --------------------------------
+encoder = Encoder(
+    latent_dim=32
+)
+
+mu, logvar = encoder(images)
+
+print("\nEncoder output:")
+print("Mu shape:", mu.shape)
+print("Log variance shape:", logvar.shape)
