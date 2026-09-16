@@ -76,3 +76,51 @@ Rangpur; this repository does not invent or guarantee a DSC above 0.9.
 
 Generated checkpoints, figures, caches, and Python bytecode are ignored by
 `.gitignore`.
+
+## Final Results
+
+### Task 1: Variational Autoencoder
+
+The VAE was trained for 50 epochs on the preprocessed OASIS MRI dataset.
+
+- Test VAE loss: **0.009350**
+- Best model checkpoint is retained locally and is not committed to GitHub.
+- The trained latent space was visualised using a 2D latent manifold.
+- Reconstruction and latent-space samples were also generated.
+
+#### Latent manifold
+
+![VAE latent manifold](final_results/vae/vae_latent_manifold.png)
+
+#### Reconstructions
+
+![VAE reconstructions](final_results/vae/vae_test_reconstructions.png)
+
+#### Latent samples
+
+![VAE latent samples](final_results/vae/vae_test_latent_samples.png)
+
+### Task 2: UNet Segmentation
+
+The custom UNet was trained on the preprocessed OASIS MRI segmentation dataset with four segmentation labels: `0`, `85`, `170`, and `255`.
+
+Test-set Dice scores:
+
+- Class 0: **0.999216**
+- Class 1: **0.964321**
+- Class 2: **0.962395**
+- Class 3: **0.976379**
+- Mean Dice: **0.975578**
+- Minimum Dice: **0.962395**
+
+All segmentation classes achieved a Dice score above **0.9**.
+
+#### Test segmentation examples
+
+![UNet test examples](final_results/unet/unet_test_examples.png)
+
+#### Single-image inference
+
+![UNet inference](final_results/unet/unet_inference.png)
+
+The trained `.pth` checkpoints are excluded from GitHub through `.gitignore` and retained separately for demonstration and inference.
