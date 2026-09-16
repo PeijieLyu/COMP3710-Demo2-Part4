@@ -2,5 +2,8 @@ __pycache__/
 *.pyc
 *.pth
 *.pt
+checkpoints/
+outputs/
 data/
 .env
+medium_review*.txt
