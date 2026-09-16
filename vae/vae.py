@@ -231,3 +231,37 @@ mu, logvar = encoder(images)
 print("\nEncoder output:")
 print("Mu shape:", mu.shape)
 print("Log variance shape:", logvar.shape)
+
+# --------------------------------
+# Reparameterization
+# --------------------------------
+def reparameterize(
+    mu,
+    logvar
+):
+
+    std = torch.exp(
+        0.5 * logvar
+    )
+
+    epsilon = torch.randn_like(
+        std
+    )
+
+    z = (
+        mu
+        + epsilon * std
+    )
+
+    return z
+
+# --------------------------------
+# Test reparameterization
+# --------------------------------
+z = reparameterize(
+    mu,
+    logvar
+)
+
+print("\nLatent sample:")
+print("Z shape:", z.shape)
